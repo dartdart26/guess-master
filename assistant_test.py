@@ -1,11 +1,10 @@
 from assistant import Assistant
-from openai_client import get_client
+import openai_client
 import sys
-import logging
 
 
 def test_start_thread():
-    client = get_client()
+    client = openai_client.get_client()
     assistant = Assistant(client)
 
     if sys.argv[1] == "create":
@@ -27,7 +26,7 @@ def test_start_thread():
 
 
 def test_correct_guess():
-    client = get_client()
+    client = openai_client.get_client()
     assistant = Assistant(client)
     assistant.load_existing()
 

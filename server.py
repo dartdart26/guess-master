@@ -1,10 +1,10 @@
 from assistant import Assistant
-from openai_client import get_client
 from flask import Flask, request, jsonify
+import openai_client
 
 
 app = Flask(__name__)
-assistant = Assistant(get_client())
+assistant = Assistant(openai_client.get_client())
 assistant.load_existing()
 
 

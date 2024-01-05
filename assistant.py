@@ -1,8 +1,10 @@
 from generate_image import generate_image
 from openai import OpenAI
+from elevenlabs_client import generate_audio
 import logging
 import time
 import json
+import base64
 
 
 logging.basicConfig(filename="./log/assistant.log", level=logging.INFO)
@@ -28,7 +30,7 @@ class Assistant:
 
     def wait_for_response(self):
         # TODO
-        time.sleep(20)
+        time.sleep(15)
 
     def generate_image(self, object: str):
         return generate_image(self.client, object)
@@ -61,6 +63,9 @@ class Assistant:
                      response_str)
         response = json.loads(response_str)
         response["thread_id"] = thread_id
+        text = response["text"]
+        audio = generate_audio(text)
+        response["audio"] = base64.b64encode(audio).decode("utf-8")
         new_object = response.get("new_object")
         if new_object is not None:
             response["image"] = self.generate_image(new_object)
