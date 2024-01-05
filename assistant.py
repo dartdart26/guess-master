@@ -28,9 +28,16 @@ class Assistant:
             id = file.read()
         self.instance = self.client.beta.assistants.retrieve(assistant_id=id)
 
-    def wait_for_response(self):
-        # TODO
-        time.sleep(15)
+    def wait_for_response(self, thread_id: str, run_id: str):
+        while True:
+            status = self.client.beta.threads.runs.retrieve(
+                thread_id=thread_id,
+                run_id=run_id,
+            ).status
+            if status == "completed":
+                break
+            else:
+                time.sleep(1)
 
     def generate_image(self, object: str):
         return generate_image(self.client, object)
@@ -51,11 +58,7 @@ class Assistant:
             thread_id=thread_id,
             assistant_id=self.instance.id,
         )
-        self.client.beta.threads.runs.retrieve(
-            thread_id=thread_id,
-            run_id=run.id,
-        )
-        self.wait_for_response()
+        self.wait_for_response(thread_id=thread_id, run_id=run.id)
         messages = self.client.beta.threads.messages.list(thread_id=thread_id)
         response_str = self.sanitize_json(
             messages.data[0].content[0].text.value)
