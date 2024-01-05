@@ -18,11 +18,12 @@ for the image is returned in a separate field and is not mentioned in the respon
 3. Create a voice in the ElevenLabs Website and get its ID.
 4. Put your ElevenLabs voice ID in the `conf/voice_id.txt` file.
 5. Create a virtual environment, e.g. `python3 -m venv path_to_venv`.
-5. Activate it, e.g. `source path_to_venv/bin/activate`.
-6. Install requirements by `pip install -r requirements.txt`.
-7. Create an OpenAI assistant by `python ./create_assistant.py`.
-8. Run the server by `flask --app server run`. 
-9. Optionally, run the client simulator by `python ./client_simulator.py` or interact with the server in a different way (e.g. Web App).
+6. Activate it, e.g. `source path_to_venv/bin/activate`.
+7. Install requirements by `pip install -r requirements.txt`.
+8. Optionally, change assistant instructions in `conf/assistant_instructions.txt`.
+9. Create an OpenAI assistant by `python ./create_assistant.py`. 
+10. Run the server by `flask --app server run`. 
+11. Optionally, run the client simulator by `python ./client_simulator.py` or interact with the server in a different way (e.g. Web App).
 
 ## Server API
 
