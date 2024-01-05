@@ -1,8 +1,11 @@
-from dalle import generate_image
+from generate_image import generate_image
 from openai import OpenAI
 import logging
 import time
 import json
+
+
+logging.basicConfig(filename="./log/assistant.log", level=logging.INFO)
 
 
 class Assistant:
@@ -10,20 +13,22 @@ class Assistant:
         self.client = client
 
     def create_new(self, name: str, instructions: str):
-        self.assistant = self.client.beta.assistants.create(
+        self.instance = self.client.beta.assistants.create(
             name=name,
             instructions=instructions,
             model="gpt-4-1106-preview"
         )
         with open("./conf/assistant_id.txt", "w") as file:
-            file.write(self.assistant.id)
+            file.write(self.instance.id)
 
-    def load_existing(self, id: str):
-        self.assistant = self.client.beta.assistants.retrieve(assistant_id=id)
+    def load_existing(self):
+        with open("./conf/assistant_id.txt", "r") as file:
+            id = file.read()
+        self.instance = self.client.beta.assistants.retrieve(assistant_id=id)
 
     def wait_for_response(self):
         # TODO
-        time.sleep(10)
+        time.sleep(20)
 
     def generate_image(self, object: str):
         return generate_image(self.client, object)
@@ -33,16 +38,16 @@ class Assistant:
         ret = ret.replace("`", "")
         return ret
 
-    def send_prompt(self, thread_id: str, content: str):
-        logging.info("(%s) %s: %s", thread_id, "user", content)
+    def send_prompt(self, thread_id: str, prompt: str):
+        logging.info("(%s) %s: %s", thread_id, "user", prompt)
         self.client.beta.threads.messages.create(
             thread_id=thread_id,
             role="user",
-            content=content,
+            content=prompt,
         )
         run = self.client.beta.threads.runs.create(
             thread_id=thread_id,
-            assistant_id=self.assistant.id,
+            assistant_id=self.instance.id,
         )
         self.client.beta.threads.runs.retrieve(
             thread_id=thread_id,
@@ -55,19 +60,11 @@ class Assistant:
         logging.info("(%s) %s: %s", thread_id, messages.data[0].role,
                      response_str)
         response = json.loads(response_str)
-        object = response["object"]
-        if response["guessed"]:
-            new_image_url = self.generate_image(object)
-            return {
-              "thread_id": thread_id,
-              "object": object,
-              "image": new_image_url,
-            }
-        else:
-            return {
-              "thread_id": thread_id,
-              "object": object,
-            }
+        response["thread_id"] = thread_id
+        new_object = response.get("new_object")
+        if new_object is not None:
+            response["image"] = self.generate_image(new_object)
+        return response
 
     def start_thread(self):
         thread = self.client.beta.threads.create()

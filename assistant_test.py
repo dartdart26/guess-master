@@ -13,9 +13,7 @@ def test_start_thread():
             instructions = file.read()
         assistant.create_new("guess-master", instructions)
     elif sys.argv[1] == "load":
-        with open("./conf/assistant_id.txt", "r") as file:
-            assistant_id = file.read()
-        assistant.load_existing(assistant_id)
+        assistant.load_existing()
     else:
         exit(-1)
 
@@ -31,9 +29,7 @@ def test_start_thread():
 def test_correct_guess():
     client = get_client()
     assistant = Assistant(client)
-    with open("./conf/assistant_id.txt", "r") as file:
-        assistant_id = file.read()
-        assistant.load_existing(assistant_id)
+    assistant.load_existing()
 
     thread_id = "thread_QJ1foO27vtmyueQLegbfrd75"
     resp = assistant.send_prompt(thread_id=thread_id, content="топка")
@@ -41,5 +37,4 @@ def test_correct_guess():
 
 
 if __name__ == "__main__":
-    logging.basicConfig(filename="./log/assistant.log", level=logging.INFO)
     test_start_thread()
