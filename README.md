@@ -27,17 +27,17 @@ for the image is returned in a separate field and is not mentioned in the respon
 ## Server API
 
 The server exposes two endpoints:
- - startThread - starts a fresh new thread and doesn't require any parameters
- - sendPrompt - sends a user prompt in an existing thread and requires the following parameters:
-    - thread_id - the thread ID in which to send the prompt
-    - prompt - the prompt text
+ - **startThread** - starts a fresh new thread and doesn't require any parameters
+ - **sendPrompt** - sends a user prompt in an existing thread and requires the following parameters:
+    - **thread_id** - the thread ID in which to send the prompt
+    - **prompt** - the prompt text
 
 Both endpoints return a JSON with the following fields:
- - thread_id - the thread ID the response from guess-master is for
- - text - response from guess-master
- - audio - a base64-encoded MP3 file of the text from guess-master
- - new_object - a decription of a new object if this is the first message in a thread or if the user guessed the previous object and a new one is generated (new_object is not present in other cases)
- - image - an URL to an image of the new_object (image only present when new_object is present)
+ - **thread_id** - the thread ID the response from guess-master is for
+ - **text** - response from guess-master
+ - **audio** - a base64-encoded MP3 file of the text from guess-master
+ - **new_object** - a decription of a new object if this is the first message in a thread or if the user guessed the previous object and a new one is generated (new_object is not present in other cases)
+ - **image** - an URL to an image of the new_object (image only present when new_object is present)
 
 A thing to note is that the server is stateless itself. State is kept in the OpenAI's thread.
 
