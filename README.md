@@ -37,8 +37,8 @@ Both endpoints return a JSON with the following fields:
  - **thread_id** - the thread ID the response from guess-master is for
  - **text** - response from guess-master
  - **audio** - a base64-encoded MP3 file of the text from guess-master
- - **new_object** - a decription of a new object if this is the first message in a thread or if the user guessed the previous object and a new one is generated (new_object is not present in other cases)
- - **image** - an URL to an image of the new_object (image only present when new_object is present)
+ - **new_object** - a decription of a new object if this is the first message in a thread or if the user guessed the previous object and a new one is generated (**new_object** is not present in other cases)
+ - **new_image** - an URL to an image of the **new_object** (**new_image** is only present when **new_object** is present)
 
 A thing to note is that the server is stateless itself. State is kept in the OpenAI's thread.
 
@@ -56,6 +56,6 @@ An example request/response looks like:
     "text": "Yes, this is a cat! What do you think the next object is?",
     "audio": "aabbbbb....",
     "new_object": "big orange baloon",
-    "image": "http://...."
+    "new_image": "http://...."
 }
 ```

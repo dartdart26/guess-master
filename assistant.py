@@ -71,7 +71,7 @@ class Assistant:
         response["audio"] = base64.b64encode(audio).decode("utf-8")
         new_object = response.get("new_object")
         if new_object is not None:
-            response["image"] = self.generate_image(new_object)
+            response["new_image"] = self.generate_image(new_object)
         return response
 
     def start_thread(self):

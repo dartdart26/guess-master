@@ -16,10 +16,10 @@ def client():
     resp = requests.post(url + "startThread").json()
     text = resp["text"]
     new_object = resp.get("new_object")
-    image = resp.get("image")
+    new_image = resp.get("new_image")
     thread_id = resp["thread_id"]
-    logging.info("start thread resp: object=%s, text=%s, image=%s", new_object,
-                 text, image)
+    logging.info("start thread resp: new_object=%s, text=%s, new_image=%s",
+                 new_object, text, new_image)
     print(f"guess-master: {text}")
     play_audio(resp["audio"])
     while True:
@@ -29,9 +29,9 @@ def client():
                              headers=headers).json()
         text = resp["text"]
         new_object = resp.get("new_object")
-        image = resp.get("image")
-        logging.info("prompt resp: object=%s, text=%s, image=%s", new_object,
-                     text, image)
+        new_image = resp.get("new_image")
+        logging.info("prompt resp: new_object=%s, text=%s, new_image=%s",
+                     new_object, text, new_image)
         print(f"guess-master: {text}")
         play_audio(resp["audio"])
 
