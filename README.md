@@ -55,6 +55,6 @@ An example request/response looks like:
     "text": "Yes, this is a cat! What do you think the next object is?",
     "audio": "aabbbbb....",
     "new_object": "big orange baloon",
-    "image: "http://...."
+    "image": "http://...."
 }
 ```
