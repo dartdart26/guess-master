@@ -85,7 +85,7 @@ Example request/responses look like:
 // sendPrompt response for an incorrect guess and a hint
 {
     "thread_id": "abcddd",
-    "text": "Nope, this is not a cat. It is a much bigger animal. What do you think it is",
+    "text": "Nope, this is not a cat. It is a much bigger animal. What do you think it is?",
     "audio": "aabbbbb....",
 }
 ```
