@@ -72,7 +72,7 @@ class Assistant:
         text = response["text"]
 
         # Generate audio and image concurrently to save some time.
-        with concurrent.futures.ThreadPoolExecutor() as executor:
+        with concurrent.futures.ThreadPoolExecutor(max_workers=2) as executor:
             audio_future = executor.submit(generate_audio, text)
             new_object = response.get("new_object")
             if new_object is not None and new_object != "":
