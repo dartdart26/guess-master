@@ -18,7 +18,7 @@ class Assistant:
         self.instance = self.client.beta.assistants.create(
             name=name,
             instructions=instructions,
-            model="gpt-4"
+            model="gpt-4-1106-preview"
         )
         with open("./conf/assistant_id.txt", "w") as file:
             file.write(self.instance.id)
