@@ -5,6 +5,7 @@ import logging
 import time
 import json
 import base64
+import concurrent.futures
 
 
 logging.basicConfig(filename="./log/assistant.log", level=logging.INFO)
@@ -58,7 +59,9 @@ class Assistant:
             thread_id=thread_id,
             assistant_id=self.instance.id,
         )
+
         self.wait_for_response(thread_id=thread_id, run_id=run.id)
+
         messages = self.client.beta.threads.messages.list(thread_id=thread_id)
         response_str = self.sanitize_json(
             messages.data[0].content[0].text.value)
@@ -67,11 +70,17 @@ class Assistant:
         response = json.loads(response_str)
         response["thread_id"] = thread_id
         text = response["text"]
-        audio = generate_audio(text)
-        response["audio"] = base64.b64encode(audio).decode("utf-8")
-        new_object = response.get("new_object")
-        if new_object is not None:
-            response["new_image"] = self.generate_image(new_object)
+
+        # Generate audio and image concurrently to save some time.
+        with concurrent.futures.ThreadPoolExecutor() as executor:
+            audio_future = executor.submit(generate_audio, text)
+            new_object = response.get("new_object")
+            if new_object is not None and new_object != "":
+                new_image_future = executor.submit(
+                    self.generate_image, new_object)
+                response["new_image"] = new_image_future.result()
+            audio = audio_future.result()
+            response["audio"] = base64.b64encode(audio).decode("utf-8")
         return response
 
     def start_thread(self):
