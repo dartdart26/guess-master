@@ -42,20 +42,50 @@ Both endpoints return a JSON with the following fields:
 
 A thing to note is that the server is stateless itself. State is kept in the OpenAI's thread.
 
-An example request/response looks like:
-```json
-// sendPrompt request
-{
-    "thread_id": "abcddd",
-    "prompt": "I think this is a cat!"
-}
+Example request/responses look like:
 
-// sendPrompt response
+```json
+// startThread request
+{}
+
+// startThread response
 {
     "thread_id": "abcddd",
     "text": "Yes, this is a cat! What do you think the next object is?",
     "audio": "aabbbbb....",
     "new_object": "big orange baloon",
     "new_image": "http://...."
+}
+```
+
+```json
+// sendPrompt request with a correct guess 
+{
+    "thread_id": "abcddd",
+    "prompt": "I think this is a cat!"
+}
+
+// sendPrompt response for a correct guess
+{
+    "thread_id": "abcddd",
+    "text": "Yes, this is a cat! What do you think the next object is?",
+    "audio": "aabbbbb....",
+    "new_object": "big orange baloon",
+    "new_image": "http://...."
+}
+```
+
+```json
+// sendPrompt request with an incorrect guess 
+{
+    "thread_id": "abcddd",
+    "prompt": "I think this is a cat!"
+}
+
+// sendPrompt response for an correct guess and a hint
+{
+    "thread_id": "abcddd",
+    "text": "Nope, this is not a cat. It is a much bigger animal. What do you think it is",
+    "audio": "aabbbbb....",
 }
 ```
