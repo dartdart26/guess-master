@@ -3,7 +3,7 @@
 guess-master is an attempt at using AI for creating a voice and visual conversational tool for children with
 certain disabilities.
 
-The main idea is that the guess-master shows DALL-E-generated images to the user and asks them to guess it.
+The main idea is that the guess-master shows DALL-E-generated images to the user and asks them to guess them.
 There is a single object in every image. Conversation and choice of object is is handled by a GPT-4 LLM.
 
 Users interact with guess-master via voice and guess-master responds with voice too. Text to speech
