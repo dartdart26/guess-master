@@ -1,5 +1,5 @@
 from assistant import Assistant
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, send_from_directory
 import openai_client
 
 
@@ -23,10 +23,16 @@ def send_prompt():
     return jsonify(resp)
 
 
+@app.route("/<path:path>", methods=["GET"])
+def home(path):
+    return send_from_directory("frontend", path)
+
+
 @app.after_request
 def after_request(response):
     response.headers.add("Access-Control-Allow-Origin", "*")
-    response.headers.add("Access-Control-Allow-Headers", "Content-Type")
+    response.headers.add("Access-Control-Allow-Headers", "*")
+    response.headers.add("Access-Control-Allow-Methods", "POST,OPTIONS")
     return response
 
 
