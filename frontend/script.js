@@ -1,8 +1,11 @@
 const audioPrompt = document.getElementById('audio-prompt');
 const chatOutput = document.getElementById('chat-output');
+const userInput = document.getElementById('user-input');
 
 const submitGuessButton = document.getElementById('submit-guess');
 submitGuessButton.addEventListener('click', submitGuess);
+
+const loader = document.getElementById('spinner');
 
 document.getElementById('start').addEventListener('click', function() {
     audioPrompt.play();
@@ -13,13 +16,19 @@ document.getElementById('start').addEventListener('click', function() {
 
 let threadId = null;
 
+function updateScroll() {
+    chatOutput.scrollTop = chatOutput.scrollHeight;
+}
+
 function submitGuess() {
-    const userInput = document.getElementById('user-input').value;
-    chatOutput.innerHTML += `<div>👤: ${userInput}</div>`;
-    sendPrompt('sendPrompt', userInput);
+    sendPrompt('sendPrompt', userInput.value);
+    chatOutput.innerHTML += `<div>👤: ${userInput.value}</div>`;
+    userInput.value = '';
+    updateScroll();
 }
 
 function sendPrompt(path, prompt) {
+    spinner.style.display = 'block';
     let body = {}
     if (prompt !== null) {
         body.thread_id = threadId;
@@ -42,6 +51,8 @@ function sendPrompt(path, prompt) {
         audioPrompt.src = "data:audio/mp3;base64," + data.audio;
         audioPrompt.play();
         chatOutput.innerHTML += `<div>🔮: ${data.text}</div>`;
+        updateScroll();
+        spinner.style.display = 'none';
     })
 }
 
