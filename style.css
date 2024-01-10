@@ -1,0 +1,40 @@
+#game-container {
+    max-width: 800px;
+    margin: auto;
+    text-align: center;
+}
+
+#image-container {
+    margin-bottom: 20px;
+}
+
+#object-image {
+    width: 400;
+    height: 300px;
+    object-fit: contain;
+}
+
+#chat-container {
+    width: 100%;
+    height: 150px;
+    border: 1px;
+}
+
+#chat-output {
+    width: 100%;
+    height: 150px;
+    border: 1px solid #ddd;
+    margin-bottom: 10px;
+    overflow-y: auto;
+}
+
+#user-input {
+    width: 70%;
+    padding: 10px;
+    margin-bottom: 10px;
+}
+
+#submit-guess {
+    padding: 10px 20px;
+    cursor: pointer
+}

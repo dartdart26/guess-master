@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Игра на познаване!</title>
+        <link rel="stylesheet" href="style.css">
+    </head>
+    <body>
+        <div id="game-container">
+            <div id="image-container">
+                <img id="object-image" src="" alt="Познай обекта">
+            </div>
+            <div id="chat-container">
+                <div id="chat-output"></div>
+                <input type="text" id="user-input" placeholder="Въведете вашето предположение тук">
+                <button id="submit-guess">Предположи</button>
+            </div>
+        </div>
+        <div id="spinner" class="loader"></div>
+        <audio id="audio-prompt" src=""></audio>
+        <script src="script.js"></script>
+    </body>
+</html>
