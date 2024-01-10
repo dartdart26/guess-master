@@ -9,16 +9,17 @@
     <body>
         <div id="game-container">
             <div id="image-container">
+                <button id="start">Започни</button>
                 <img id="object-image" src="" alt="Познай обекта">
             </div>
             <div id="chat-container">
                 <div id="chat-output"></div>
                 <input type="text" id="user-input" placeholder="Въведете вашето предположение тук">
-                <button id="submit-guess">Предположи</button>
+                <button id="submit-guess" class="hidden">Познай</button>
             </div>
         </div>
         <div id="spinner" class="loader"></div>
-        <audio id="audio-prompt" src=""></audio>
+        <audio id="audio-prompt" autoplay></audio>
         <script src="script.js"></script>
     </body>
 </html>
