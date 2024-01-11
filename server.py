@@ -24,16 +24,8 @@ def send_prompt():
 
 
 @app.route("/<path:path>", methods=["GET"])
-def home(path):
+def serve(path):
     return send_from_directory("frontend", path)
-
-
-@app.after_request
-def after_request(response):
-    response.headers.add("Access-Control-Allow-Origin", "*")
-    response.headers.add("Access-Control-Allow-Headers", "*")
-    response.headers.add("Access-Control-Allow-Methods", "POST,OPTIONS")
-    return response
 
 
 if __name__ == "__main__":
