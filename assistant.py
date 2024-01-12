@@ -8,7 +8,9 @@ import base64
 import concurrent.futures
 
 
-logging.basicConfig(filename="./log/assistant.log", level=logging.INFO)
+logging.basicConfig(format="%(asctime)s: %(levelname)s: %(message)s",
+                    filename="./log/assistant.log",
+                    level=logging.INFO)
 
 
 class Assistant:

@@ -34,7 +34,7 @@ function sendPrompt(path, prompt) {
         body.thread_id = threadId;
         body.prompt = prompt;
     }
-    fetch('http://10.211.55.3:5000/' + path, {
+    fetch('http://localhost:5002/' + path, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'

@@ -1,17 +1,22 @@
 import requests
+import logging
 
 
 with open("./conf/elevenlabs_api_key.txt", "r") as file:
     api_key = file.read()
 with open("./conf/voice_id.txt", "r") as file:
     voice_id = file.read()
-chunk_size = 1024
-url = "https://api.elevenlabs.io/v1/text-to-speech/" + voice_id
+url = "https://api.elevenlabs.io/v1/text-to-speech/" + voice_id + "/stream"
 headers = {
     "xi-api-key": api_key,
     "Content-Type": "application/json",
     "Accept": "audio/mpeg"
 }
+
+
+params = dict()
+params["output_format"] = "mp3_22050_32"
+params["optimize_streaming_latency"] = 4
 
 
 def generate_audio(text: str):
@@ -23,7 +28,9 @@ def generate_audio(text: str):
             "similarity_boost": 0.5
         }
     }
-    response = requests.post(url, json=data, headers=headers)
+    logging.info("sending request to ElevenLabs")
+    response = requests.post(url, json=data, headers=headers, params=params)
+    logging.info("received response from ElevenLabs")
     return response.content
 
 

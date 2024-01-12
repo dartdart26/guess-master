@@ -3,6 +3,7 @@ import logging
 
 
 def generate_image(client: OpenAI, object: str):
+    logging.info("generating image %s", object)
     resp = client.images.generate(
         model="dall-e-3",
         prompt=object,
