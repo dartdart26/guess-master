@@ -1,6 +1,7 @@
 from generate_image import generate_image
 from openai import OpenAI
 from elevenlabs_client import generate_audio
+from guessed_audio import guessed_text, base64_guessed_audio
 import logging
 import time
 import json
@@ -83,7 +84,8 @@ class Assistant:
             new_object = self.select_random_object()
             self.send_prompt(thread_id, "new_object: " + new_object["object"])
             json_response["new_image"] = self.image_url(new_object)
-            json_response["text"] = "Ти позна!"
+            json_response["text"] = guessed_text
+            json_response["audio"] = base64_guessed_audio()
         else:
             hint = lines[1]
             json_response["text"] = hint

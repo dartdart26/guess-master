@@ -167,3 +167,4 @@ conf/objects.txt
 log/*.log
 db/*.json
 db/images*
+db/*.mp3
