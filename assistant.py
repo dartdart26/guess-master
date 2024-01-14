@@ -88,6 +88,7 @@ class Assistant:
             json_response["audio"] = base64_guessed_audio()
         else:
             hint = lines[1]
+            hint = "Опитай пак! " + hint
             json_response["text"] = hint
             audio = generate_audio(hint)
             json_response["audio"] = base64.b64encode(audio).decode("utf-8")
