@@ -5,7 +5,7 @@ import logging
 import time
 import json
 import base64
-import concurrent.futures
+import random
 
 
 logging.basicConfig(format="%(asctime)s: %(levelname)s: %(message)s",
@@ -14,8 +14,12 @@ logging.basicConfig(format="%(asctime)s: %(levelname)s: %(message)s",
 
 
 class Assistant:
-    def __init__(self, client: OpenAI):
+    def __init__(self, client: OpenAI, host: str, port: int):
         self.client = client
+        self.image_path = f"http://{host}:{port}/images/"
+
+        with open("./db/objects.json", "r") as file:
+            self.objects = json.load(file)
 
     def create_new(self, name: str, instructions: str):
         self.instance = self.client.beta.assistants.create(
@@ -40,7 +44,7 @@ class Assistant:
             if status == "completed":
                 break
             else:
-                time.sleep(1)
+                time.sleep(0.3)
 
     def generate_image(self, object: str):
         return generate_image(self.client, object)
@@ -57,34 +61,49 @@ class Assistant:
             role="user",
             content=prompt,
         )
-        run = self.client.beta.threads.runs.create(
+        return self.client.beta.threads.runs.create(
             thread_id=thread_id,
             assistant_id=self.instance.id,
         )
 
+    def send_prompt_and_return_response(self, thread_id: str, prompt: str):
+        run = self.send_prompt(thread_id, prompt)
+
         self.wait_for_response(thread_id=thread_id, run_id=run.id)
 
         messages = self.client.beta.threads.messages.list(thread_id=thread_id)
-        response_str = self.sanitize_json(
-            messages.data[0].content[0].text.value)
+        response = messages.data[0].content[0].text.value
         logging.info("(%s) %s: %s", thread_id, messages.data[0].role,
-                     response_str)
-        response = json.loads(response_str)
-        response["thread_id"] = thread_id
-        text = response["text"]
+                     response)
+        lines = response.splitlines()
+        guessed = lines[0]
+        json_response = {}
+        json_response["thread_id"] = thread_id
+        if guessed.startswith("1"):
+            new_object = self.select_random_object()
+            self.send_prompt(thread_id, "new_object: " + new_object["object"])
+            json_response["new_image"] = self.image_url(new_object)
+            json_response["text"] = "Ти позна!"
+        else:
+            hint = lines[1]
+            json_response["text"] = hint
+            audio = generate_audio(hint)
+            json_response["audio"] = base64.b64encode(audio).decode("utf-8")
+        logging.info("json_response: %s", str(json_response))
+        return json_response
 
-        # Generate audio and image concurrently to save some time.
-        with concurrent.futures.ThreadPoolExecutor(max_workers=2) as executor:
-            audio_future = executor.submit(generate_audio, text)
-            new_object = response.get("new_object")
-            if new_object is not None and new_object != "":
-                new_image_future = executor.submit(
-                    self.generate_image, new_object)
-                response["new_image"] = new_image_future.result()
-            audio = audio_future.result()
-            response["audio"] = base64.b64encode(audio).decode("utf-8")
-        return response
+    def image_url(self, object):
+        return self.image_path + str(object["id"]) + ".jpg"
+
+    def select_random_object(self):
+        return random.choice(self.objects)
 
     def start_thread(self):
         thread = self.client.beta.threads.create()
-        return self.send_prompt(thread.id, "Здравей!")
+        new_object = self.select_random_object()
+        self.send_prompt(thread.id, "new_object: " + new_object["object"])
+        json_response = {}
+        json_response["thread_id"] = thread.id
+        json_response["new_image"] = self.image_url(new_object)
+        json_response["text"] = "Да започваме!"
+        return json_response

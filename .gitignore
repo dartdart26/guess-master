@@ -163,4 +163,7 @@ conf/openai_api_key.txt
 conf/elevenlabs_api_key.txt
 conf/assistant_id.txt
 conf/voice_id.txt
+conf/objects.txt
 log/*.log
+db/*.json
+db/images*

@@ -48,8 +48,10 @@ function sendPrompt(path, prompt) {
         }
         threadId = data.thread_id;
 
-        audioPrompt.src = "data:audio/mp3;base64," + data.audio;
-        audioPrompt.play();
+        if ('audio' in data) {
+            audioPrompt.src = "data:audio/mp3;base64," + data.audio;
+            audioPrompt.play();
+        }
         chatOutput.innerHTML += `<div>🔮: ${data.text}</div>`;
         updateScroll();
         spinner.style.display = 'none';
