@@ -1,11 +1,13 @@
 const audioPrompt = document.getElementById('audio-prompt');
 const chatOutput = document.getElementById('chat-output');
 const userInput = document.getElementById('user-input');
+const image = document.getElementById('object-image');
 
 const submitGuessButton = document.getElementById('submit-guess');
 submitGuessButton.addEventListener('click', submitGuess);
 
 const loader = document.getElementById('spinner');
+const baseUrl = 'http://localhost:5002/';
 
 document.getElementById('start').addEventListener('click', function() {
     audioPrompt.play();
@@ -42,7 +44,7 @@ function createConfetti() {
 
     setTimeout(() => {
         document.body.removeChild(confettiContainer);
-    }, 3000);
+    }, 2000);
 }
 
 function getRandomColor() {
@@ -57,7 +59,7 @@ function sendPrompt(path, prompt, confetti) {
         body.thread_id = threadId;
         body.prompt = prompt;
     }
-    fetch('http://localhost:5002/' + path, {
+    fetch(baseUrl + path, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
@@ -69,12 +71,19 @@ function sendPrompt(path, prompt, confetti) {
         if ('new_image' in data) {
             if (confetti) {
                 createConfetti();
+                image.src = baseUrl + 'images/guessed.jpg';
                 setTimeout(() => {
-                    document.getElementById('object-image').src = data.new_image;
-                }, 3000);
+                    image.src = data.new_image;
+                }, 2000);
             } else {
-                document.getElementById('object-image').src = data.new_image;
+                image.src = data.new_image;
             }
+        } else {
+            const currentImage = image.src;
+            image.src = baseUrl + 'images/sad.jpg';
+            setTimeout(() => {
+                image.src = currentImage;
+            }, 2000);
         }
         threadId = data.thread_id;
 

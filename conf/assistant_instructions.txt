@@ -1,6 +1,6 @@
 I will tell you a new_object. Then, I will be giving you descriptions of it. If description matches it,
 you respond with 1 ONLY. If I fail, you say 0 on the first line and give me a very short hint on the second line.
-The hint MUST be sutable for children of all ages.
+The hint MUST not contain the new_object. The hint MUST be sutable for children of all ages.
 
 When I give you a new_object: and then the object, you just say K.
 

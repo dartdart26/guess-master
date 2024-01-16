@@ -9,8 +9,8 @@
 }
 
 #object-image {
-    width: 400;
-    height: 300px;
+    width: 450px;
+    height: 450px;
     object-fit: contain;
 }
 
