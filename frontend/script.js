@@ -11,7 +11,7 @@ document.getElementById('start').addEventListener('click', function() {
     audioPrompt.play();
     this.style.display = 'none';
     submitGuessButton.style.display = 'block';
-    sendPrompt('startThread', null);
+    sendPrompt('startThread', null, false);
 });
 
 let threadId = null;
@@ -21,13 +21,36 @@ function updateScroll() {
 }
 
 function submitGuess() {
-    sendPrompt('sendPrompt', userInput.value);
+    sendPrompt('sendPrompt', userInput.value, true);
     chatOutput.innerHTML += `<div>👤: ${userInput.value}</div>`;
     userInput.value = '';
     updateScroll();
 }
 
-function sendPrompt(path, prompt) {
+function createConfetti() {
+    const confettiCount = 200;
+    const confettiContainer = document.createElement("div");
+    for (let i = 0; i < confettiCount; i++) {
+        const confetti = document.createElement("div");
+        confetti.className = "confetti-piece";
+        confetti.style.left = `${Math.random() * 100}%`;
+        confetti.style.top = `${Math.random() * 100}%`;
+        confetti.style.backgroundColor = getRandomColor();
+        confettiContainer.append(confetti);
+    }
+    document.body.appendChild(confettiContainer);
+
+    setTimeout(() => {
+        document.body.removeChild(confettiContainer);
+    }, 3000);
+}
+
+function getRandomColor() {
+    const colors = ["#ff0", "#f0f", "#0ff", "#0f0", "#00f", "#foo"];
+    return colors[Math.floor(Math.random() * colors.length)];
+}
+
+function sendPrompt(path, prompt, confetti) {
     spinner.style.display = 'block';
     let body = {}
     if (prompt !== null) {
@@ -44,7 +67,14 @@ function sendPrompt(path, prompt) {
     .then(response => response.json())
     .then(data => {
         if ('new_image' in data) {
-            document.getElementById('object-image').src = data.new_image;
+            if (confetti) {
+                createConfetti();
+                setTimeout(() => {
+                    document.getElementById('object-image').src = data.new_image;
+                }, 3000);
+            } else {
+                document.getElementById('object-image').src = data.new_image;
+            }
         }
         threadId = data.thread_id;
 

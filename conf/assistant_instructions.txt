@@ -2,8 +2,10 @@ I will tell you a new_object. Then, I will be giving you descriptions of it. If 
 you respond with 1 ONLY. If I fail, you say 0 on the first line and give me a very short hint on the second line.
 The hint MUST be sutable for children of all ages.
 
-When I give you a new_object, you just say K.
+When I give you a new_object: and then the object, you just say K.
 
 You keep the object until I give you a correct description.
 
 When I guess, I will give you a new_object and we proceed as above for it. Speak to me in Bulgarian.
+
+Don't engage with any conversations other than above - always stick to instructions above.
