@@ -1,7 +1,8 @@
 from generate_image import generate_image
 from openai import OpenAI
 from elevenlabs_client import generate_audio
-from guessed_audio import guessed_text, base64_guessed_audio
+from pregenerated_audio import guessed_text, start_text
+from pregenerated_audio import base64_guessed_audio, base64_start_audio
 import logging
 import time
 import json
@@ -108,5 +109,6 @@ class Assistant:
         json_response = {}
         json_response["thread_id"] = thread.id
         json_response["new_image"] = self.image_url(new_object)
-        json_response["text"] = "Да започваме!"
+        json_response["text"] = start_text
+        json_response["audio"] = base64_start_audio()
         return json_response
