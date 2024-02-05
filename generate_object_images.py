@@ -1,4 +1,5 @@
 from generate_image import generate_image
+from tqdm import tqdm
 import openai_client
 import json
 import logging
@@ -15,7 +16,7 @@ def generate_object_images():
     with open("./conf/objects.txt", "r") as file:
         objects = [obj.strip() for obj in file]
     id = 0
-    for obj in objects:
+    for obj in tqdm(objects, desc="Generating images"):
         logging.info("generating image for object (%s), id (%d)", obj, id)
         url = generate_image(client, obj)
         logging.info("generated image for object(%s), id(%d): %s",

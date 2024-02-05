@@ -1,59 +1,45 @@
-const audioPrompt = document.getElementById('audio-prompt');
-const chatOutput = document.getElementById('chat-output');
-const userInput = document.getElementById('user-input');
-const image = document.getElementById('object-image');
-
-const submitGuessButton = document.getElementById('submit-guess');
-submitGuessButton.addEventListener('click', submitGuess);
-
-const loader = document.getElementById('spinner');
 const baseUrl = 'http://localhost:5002/';
 
-document.getElementById('start').addEventListener('click', function() {
+const startContainer    = document.getElementById('start-container');
+const gameLoader        = document.getElementById('game-loader');
+const gameContainer     = document.getElementById('game-container');
+const startButton       = document.getElementById('start');
+const audioPrompt       = document.getElementById('audio-prompt');
+const chatOutput        = document.getElementById('chat-output');
+const userInput         = document.getElementById('user-input');
+const image             = document.getElementById('object-image');
+const submitGuessButton = document.getElementById('submit-guess');
+const cannonsContainer  = document.getElementById('cannons');
+const cannons           = document.getElementsByClassName('cannon');
+const cannonSound       = document.getElementById('cannon-sound');
+const applauseSound     = document.getElementById('applause-sound');
+
+submitGuessButton.addEventListener('click', submitGuess);
+
+startButton.addEventListener('click', function() {
     audioPrompt.play();
-    this.style.display = 'none';
-    submitGuessButton.style.display = 'block';
-    sendPrompt('startThread', null, false);
+    sendPrompt('startThread', null);
 });
 
 let threadId = null;
+let firstRun = true;
 
 function updateScroll() {
     chatOutput.scrollTop = chatOutput.scrollHeight;
 }
 
 function submitGuess() {
-    sendPrompt('sendPrompt', userInput.value, true);
+    sendPrompt('sendPrompt', userInput.value);
     chatOutput.innerHTML += `<div>👤: ${userInput.value}</div>`;
     userInput.value = '';
     updateScroll();
 }
 
-function createConfetti() {
-    const confettiCount = 200;
-    const confettiContainer = document.createElement("div");
-    for (let i = 0; i < confettiCount; i++) {
-        const confetti = document.createElement("div");
-        confetti.className = "confetti-piece";
-        confetti.style.left = `${Math.random() * 100}%`;
-        confetti.style.top = `${Math.random() * 100}%`;
-        confetti.style.backgroundColor = getRandomColor();
-        confettiContainer.append(confetti);
-    }
-    document.body.appendChild(confettiContainer);
+function sendPrompt(path, prompt) {
+    startContainer.style.display = 'none';
+    gameContainer.style.display = 'none';
+    gameLoader.style.display = 'flex';
 
-    setTimeout(() => {
-        document.body.removeChild(confettiContainer);
-    }, 2000);
-}
-
-function getRandomColor() {
-    const colors = ["#ff0", "#f0f", "#0ff", "#0f0", "#00f", "#foo"];
-    return colors[Math.floor(Math.random() * colors.length)];
-}
-
-function sendPrompt(path, prompt, confetti) {
-    spinner.style.display = 'block';
     let body = {}
     if (prompt !== null) {
         body.thread_id = threadId;
@@ -69,14 +55,16 @@ function sendPrompt(path, prompt, confetti) {
     .then(response => response.json())
     .then(data => {
         if ('new_image' in data) {
-            if (confetti) {
-                createConfetti();
+            if (firstRun == true) {
+                image.src = data.new_image;
+                firstRun = false;
+            } else {
                 image.src = baseUrl + 'images/guessed.jpg';
+                fireAllCannons();
+
                 setTimeout(() => {
                     image.src = data.new_image;
-                }, 2000);
-            } else {
-                image.src = data.new_image;
+                }, 7000);
             }
         } else {
             const currentImage = image.src;
@@ -91,9 +79,48 @@ function sendPrompt(path, prompt, confetti) {
             audioPrompt.src = "data:audio/mp3;base64," + data.audio;
             audioPrompt.play();
         }
+        
         chatOutput.innerHTML += `<div>🔮: ${data.text}</div>`;
         updateScroll();
-        spinner.style.display = 'none';
+
+        gameLoader.style.display = 'none';    
+        gameContainer.style.display = 'block';
     })
 }
 
+function fireCannon(cannon, timesLeft) {
+    if (timesLeft <= 0) {
+      return;
+    }
+  
+    let interval = Math.random() * 500 + 500;
+  
+    setTimeout(() => {
+      party.confetti(cannon, {
+        shapes: ["star"],
+        count: 50,
+        size: 2.5,
+        speed: 900,
+        spread: 40,
+        color: new party.Color.fromHex("#ffd700"),
+      });
+      
+      cannonSound.currentTime = 0;
+      cannonSound.play();
+      
+      fireCannon(cannon, timesLeft - 1);
+    }, interval);
+  }
+
+
+function fireAllCannons() {
+    let firesCount = 5;
+
+    applauseSound.currentTime = 0;
+    applauseSound.volume = 0.4; 
+    applauseSound.play();
+
+    cannonsContainer.style.display = 'block'; 
+    [...cannons].forEach(cannon => fireCannon(cannon, firesCount));
+    setTimeout(() => { cannonsContainer.style.display = 'none' }, firesCount * 1000);
+}

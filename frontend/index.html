@@ -1,15 +1,19 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="bg">
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Игра на познаване!</title>
+        <title>Познавачът!</title>
+        <link rel="icon" href="favicon.ico" type="image/x-icon">
         <link rel="stylesheet" href="style.css">
     </head>
     <body>
+        <div id="start-container">
+            <button id="start">СТАРТ</button>
+        </div>
+        <div id="game-loader">МОЛЯ ИЗЧАКАЙ</div>
         <div id="game-container">
             <div id="image-container">
-                <button id="start">Започни</button>
                 <img id="object-image" src="" alt="Познай обекта">
             </div>
             <div id="chat-container">
@@ -18,8 +22,16 @@
                 <button id="submit-guess">Познай</button>
             </div>
         </div>
-        <div id="spinner" class="loader"></div>
+
+        <div id="cannons">
+            <div id="left-cannon" class="cannon"></div>
+            <div id="right-cannon" class="cannon"></div>
+        </div>
+
         <audio id="audio-prompt" autoplay></audio>
+        <audio id="cannon-sound" src="cannon.mp3" preload="auto"></audio>
+        <audio id="applause-sound" src="applause.mp3" preload="auto"></audio>
         <script src="script.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/party-js@latest/bundle/party.min.js"></script>
     </body>
 </html>

@@ -1,30 +1,56 @@
-#game-container {
-    max-width: 800px;
-    margin: auto;
-    text-align: center;
+body {
+    font-family: 'Comic Sans MS', cursive, sans-serif;
+    background-color: #f7f5f2;
+    color: #333;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh; 
+    background-image: url('bg.webp');
+    background-size: cover;
+    overflow: hidden;
 }
-
-#image-container {
-    margin-bottom: 20px;
+  
+#game-container, #game-loader {
+    display: none;
+    position: relative;
+    background-color: rgba(255, 255, 255, 0.9);
+    padding: 30px;
+    margin: 20px;
+    border-radius: 20px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    border: 5px dashed #ffd700;
+    min-width: 20vw;
+    max-width: 50vw;
+    min-height: 20vh;
 }
 
 #object-image {
-    width: 450px;
-    height: 450px;
-    object-fit: contain;
+    max-width: 100%;
+    height: auto;
+    border: 4px solid #ffd700;
+    border-radius: 15px;
+    margin-bottom: 20px;
+    transition: transform 0.3s ease;
+}
+
+#object-image:hover {
+    transform: scale(1.05);
 }
 
 #chat-container {
     width: 100%;
-    height: 150px;
-    border: 1px;
+    border: 4px solid #ffd700;
+    border-radius: 15px;
     align-items: center;
 }
 
 #chat-output {
     width: 100%;
     height: 150px;
-    border: 1px solid #ddd;
     margin-bottom: 10px;
     overflow-y: auto;
     scroll-behavior: smooth;
@@ -40,7 +66,6 @@
     padding: 10px 20px;
     cursor: pointer;
     margin: 0 auto;
-    display: none;
 }
 
 #start {
@@ -54,24 +79,122 @@
     background-color: darkgrey;
 }
 
-.loader {
-    border: 5px solid firebrick;
-    width: 80px;
-    height: 80px;
-    animation: spin 2s linear infinite;
-    margin: auto;
+/* BEGIN: Start button anumations */
+#start {
+    width: 50vw;
+    height: 40vh;
+    font-family: 'Comic Sans MS', cursive, sans-serif;
+    font-size: 6vw;
+    background-color: #B4CA61;
+    color: #FFFFFF;
+    border: 6px solid #FF8C00;
+    border-radius: 50px;
+    box-shadow: 4px 5px #DDA0DD;
+    transition: all 0.6s ease;
+    overflow: hidden;
+    animation: pulse 5s infinite;
+}
+  
+#start:hover {
+    background-color: #E4EA91;
+    box-shadow: 10px 15px #BA55D3;
+}
+  
+#start::before, #start::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    width: 55px;
+    height: 55px;
+    background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" fill="%23FFD700" stroke="%23572D20" stroke-width="50"><path d="M512 0l148.48 300.8L1024 349.44l-240 233.6 56.64 330.56L512 729.6 183.36 913.6l56.64-330.56-240-233.6 363.52-48.64L512 0z"/></svg>');
+}
+  
+#start::before {
+    left: 2vw;
+    top: 20vh;
+    animation: spinAndFloat1 6s linear infinite;
+    animation-direction: alternate;
+}
+  
+#start::after {
+    left: 38vw;
+    top: 12vh;
+    animation: spinAndFloat2 6s linear infinite;
+    animation-direction: alternate;
+}
+  
+@keyframes pulse {
+    0%, 100% { transform: scale(1); }
+    50%      { transform: scale(1.05); }
+}
+  
+@keyframes spinAndFloat1 {
+    0%, 100% { transform: translate(0, 0) scale(1) rotate(0deg); }
+    20%      { transform: translate(-10px, -20px) scale(1.2) rotate(45deg); }
+    40%      { transform: translate(20px, -20px) scale(0.8) rotate(-45deg); }
+    60%      { transform: translate(-10px, -20px) scale(1.2) rotate(45deg); }
+    80%      { transform: translate(0, 0) scale(1.1) rotate(0deg); }
+}
+      
+@keyframes spinAndFloat2 {
+    0%, 100% { transform: translate(0, 0) scale(1) rotate(0deg); }
+    25%      { transform: translate(-10px, -10px) scale(1.1) rotate(45deg); }
+    50%      { transform: translate(10px, 10px) scale(0.9) rotate(-45deg); }
+    75%      { transform: translate(-10px, -10px) scale(1.1) rotate(45deg); }
+}
+/* END: Start button anumations */
+
+/* BEGIN: Loader animation */
+#game-loader {
+    font-size: 8vh;
+    align-items: center;  /* Align children vertically in the center */
+    justify-content: center; /* Center children horizontally */
+}
+
+#game-loader::after {
+    content: '';
+    position: absolute;
+    background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" fill="%23FFD700" stroke="%23572D20" stroke-width="50"><path d="M512 0l148.48 300.8L1024 349.44l-240 233.6 56.64 330.56L512 729.6 183.36 913.6l56.64-330.56-240-233.6 363.52-48.64L512 0z"/></svg>');
+    opacity: 0.2;
+    top: 50%;
+    left: 50%;
+    width: 100px;
+    height: 100px;
+    margin-top: -50px;
+    margin-left: -50px;
+    transform: translateX(-50%) translateY(-50px) rotate(0deg);
+    animation: pulse2 5s ease-in-out infinite;
+}
+
+@keyframes pulse2 {
+    0%, 100% { transform: scale(1); }
+    50%      { transform: scale(1.5); }
+}
+
+/* END: Loader animation */
+
+/* BEGIN: Cannons */
+#cannons {
     display: none;
 }
-
-@keyframes spin {
-    0% { transform: rotate(0deg); }
-    100% { transform: rotate(360deg); }
-}
-
-.confetti-piece {
+.cannon {
+    background-color: brown;
+    width: 5vw;
+    height: 30vh;
     position: absolute;
-    width: 10px;
-    height: 10px;
-    background-color: red;
-    opacity: 0.7;
+    bottom: 0px;
+    border: 5px solid darkgoldenrod;
+    border-top-width: 15px;
+    bottom: -7vh;
 }
+
+.cannon#left-cannon {
+    left: -10vh;
+    transform: rotate(45deg);
+}
+
+.cannon#right-cannon {
+    right: -10vh;
+    transform: rotate(-45deg);
+}
+/* END: Cannon */

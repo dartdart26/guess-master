@@ -22,8 +22,14 @@ for the image is returned in a separate field and is not mentioned in the respon
 7. Install requirements by `pip install -r requirements.txt`.
 8. Optionally, change assistant instructions in `conf/assistant_instructions.txt`.
 9. Create an OpenAI assistant by `python ./create_assistant.py`. 
-10. Run the server by `flask --app server run`. 
-11. Optionally, run the client simulator by `python ./client_simulator.py` or interact with the server in a different way (e.g. Web App).
+10. Put a list of object (new line separated) in `conf/objets.txt`.
+11. Create the folder `db/images`.
+12. Generate images by `python ./generate_object_images.py`.
+13. Generate sad face/happy face images by `python ./generate_feedback_images.py`.
+14. Generate (e.g. in ElevenLabs) an initial voice message and put it as `db/start.mp3`
+15. Run the server by `flask --app server run -p 5002`. 
+16. Optionally, run the client simulator by `python ./client_simulator.py` or interact with the server in a different way (e.g. Web App).
+17. Optinally, open `localhost:5002/index.html` for a web interface.
 
 ## Server API
 
