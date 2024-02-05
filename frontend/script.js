@@ -24,6 +24,30 @@ startButton.addEventListener('click', function() {
 let threadId = null;
 let firstRun = true;
 
+if ('webkitSpeechRecognition' in window) {
+    var speechRecognition = new webkitSpeechRecognition();
+    speechRecognition.lang = 'bg-BG';
+    speechRecognition.interimResults = true;
+    speechRecognition.maxAlternatives = 1;
+    speechRecognition.continuous = true;
+
+    speechRecognition.onresult = function(event) {
+        var speechResult = event.results[0][0].transcript;
+        document.getElementById('user-input').value = speechResult;
+        
+        if (event.results[0].isFinal) {
+            submitGuess();
+        }
+    };
+
+    speechRecognition.onerror = function(event) {
+        console.log('Грешка в разпознаването на глас.', event.error);
+        speechRecognition.start();
+    };
+} else {
+    console.log('За съжаление, този браузър не поддържа разпознване на глас. Моля опитайте с Google Chrome или Microsoft Edge.');
+}
+
 function updateScroll() {
     chatOutput.scrollTop = chatOutput.scrollHeight;
 }
@@ -36,15 +60,19 @@ function submitGuess() {
 }
 
 function sendPrompt(path, prompt) {
+    speechRecognition.stop();
+
     startContainer.style.display = 'none';
     gameContainer.style.display = 'none';
     gameLoader.style.display = 'flex';
 
     let body = {}
+    
     if (prompt !== null) {
         body.thread_id = threadId;
         body.prompt = prompt;
     }
+
     fetch(baseUrl + path, {
         method: 'POST',
         headers: {
@@ -85,6 +113,7 @@ function sendPrompt(path, prompt) {
 
         gameLoader.style.display = 'none';    
         gameContainer.style.display = 'block';
+        speechRecognition.start();
     })
 }
 
