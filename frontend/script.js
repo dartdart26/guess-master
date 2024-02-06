@@ -5,6 +5,7 @@ const gameLoader        = document.getElementById('game-loader');
 const gameContainer     = document.getElementById('game-container');
 const startButton       = document.getElementById('start');
 const audioPrompt       = document.getElementById('audio-prompt');
+const chatContainer     = document.getElementById('chat-container');
 const chatOutput        = document.getElementById('chat-output');
 const userInput         = document.getElementById('user-input');
 const image             = document.getElementById('object-image');
@@ -13,10 +14,16 @@ const cannonsContainer  = document.getElementById('cannons');
 const cannons           = document.getElementsByClassName('cannon');
 const cannonSound       = document.getElementById('cannon-sound');
 const applauseSound     = document.getElementById('applause-sound');
+const chatToggle        = document.getElementById('toggle-chat');
+
+
+chatToggle.addEventListener('click', () => {
+    chatContainer.classList.toggle('hidden')
+});
 
 submitGuessButton.addEventListener('click', submitGuess);
 
-startButton.addEventListener('click', function() {
+startButton.addEventListener('click', () => {
     audioPrompt.play();
     sendPrompt('startThread', null);
 });
@@ -31,7 +38,7 @@ if ('webkitSpeechRecognition' in window) {
     speechRecognition.maxAlternatives = 1;
     speechRecognition.continuous = true;
 
-    speechRecognition.onresult = function(event) {
+    speechRecognition.onresult = (event) => {
         var speechResult = event.results[0][0].transcript;
         document.getElementById('user-input').value = speechResult;
         
@@ -40,7 +47,7 @@ if ('webkitSpeechRecognition' in window) {
         }
     };
 
-    speechRecognition.onerror = function(event) {
+    speechRecognition.onerror = (event) => {
         console.log('Грешка в разпознаването на глас.', event.error);
         speechRecognition.start();
     };
@@ -153,3 +160,4 @@ function fireAllCannons() {
     [...cannons].forEach(cannon => fireCannon(cannon, firesCount));
     setTimeout(() => { cannonsContainer.style.display = 'none' }, firesCount * 1000);
 }
+

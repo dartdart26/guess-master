@@ -1,3 +1,11 @@
+:root {
+    --star-svg-background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" fill="%23FFD700" stroke="%23572D20" stroke-width="50"><path d="M512 0l148.48 300.8L1024 349.44l-240 233.6 56.64 330.56L512 729.6 183.36 913.6l56.64-330.56-240-233.6 363.52-48.64L512 0z"/></svg>');
+}
+
+.hidden {
+    display: none;
+}
+
 body {
     font-family: 'Comic Sans MS', cursive, sans-serif;
     background-color: #f7f5f2;
@@ -46,6 +54,7 @@ body {
     border: 4px solid #ffd700;
     border-radius: 15px;
     align-items: center;
+    margin-top: 30px;
 }
 
 #chat-output {
@@ -106,7 +115,7 @@ body {
     top: 50%;
     width: 55px;
     height: 55px;
-    background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" fill="%23FFD700" stroke="%23572D20" stroke-width="50"><path d="M512 0l148.48 300.8L1024 349.44l-240 233.6 56.64 330.56L512 729.6 183.36 913.6l56.64-330.56-240-233.6 363.52-48.64L512 0z"/></svg>');
+    background: var(--star-svg-background);
 }
   
 #start::before {
@@ -198,3 +207,39 @@ body {
     transform: rotate(-45deg);
 }
 /* END: Cannon */
+
+/* BEGIN: Toggle chat */
+#toggle-chat {
+    position: relative;
+    color: #ffd700;
+    padding: 10px;
+    text-decoration: none;
+    font-size: 22px;
+    font-weight: bold;
+}
+
+#toggle-chat::before, #toggle-chat::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 20px;
+    height: 20px;
+    background: var(--star-svg-background);
+    background-size: contain;
+    background-repeat: no-repeat;
+}
+
+#toggle-chat::before {
+    left: -25px;
+    animation: spinAndFloat1 6s linear infinite;
+    animation-direction: alternate;
+
+}
+
+#toggle-chat::after {
+    right: -25px;
+    animation: spinAndFloat2 6s linear infinite;
+    animation-direction: alternate;
+}
+/* END: Toggle chat */
