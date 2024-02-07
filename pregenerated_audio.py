@@ -4,7 +4,7 @@ import base64
 
 guessed_text = "Браво, ти позна!"
 guessed_audio_file = "db/guessed.mp3"
-start_text = "Нека започвме! Какво виждаш?"
+start_text = "Здравей! Хайде да играем! Можеш ли да познаеш какво има на тази картинка?"
 start_audio_file = "db/start.mp3"
 
 
