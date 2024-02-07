@@ -1,24 +1,27 @@
 const baseUrl = 'http://localhost:5002/';
 
-const startContainer    = document.getElementById('start-container');
-const gameLoader        = document.getElementById('game-loader');
-const gameContainer     = document.getElementById('game-container');
-const startButton       = document.getElementById('start');
-const audioPrompt       = document.getElementById('audio-prompt');
-const chatContainer     = document.getElementById('chat-container');
-const chatOutput        = document.getElementById('chat-output');
-const userInput         = document.getElementById('user-input');
-const image             = document.getElementById('object-image');
-const submitGuessButton = document.getElementById('submit-guess');
-const cannonsContainer  = document.getElementById('cannons');
-const cannons           = document.getElementsByClassName('cannon');
-const cannonSound       = document.getElementById('cannon-sound');
-const applauseSound     = document.getElementById('applause-sound');
-const chatToggle        = document.getElementById('toggle-chat');
+const startContainer      = document.getElementById('start-container');
+const gameLoader          = document.getElementById('game-loader');
+const gameContainer       = document.getElementById('game-container');
+const startButton         = document.getElementById('start');
+const audioPrompt         = document.getElementById('audio-prompt');
+const chatContainer       = document.getElementById('chat-container');
+const chatOutput          = document.getElementById('chat-output');
+const userInput           = document.getElementById('user-input');
+const image               = document.getElementById('object-image');
+const submitGuessButton   = document.getElementById('submit-guess');
+const cannonsContainer    = document.getElementById('cannons');
+const cannons             = document.getElementsByClassName('cannon');
+const cannonSound         = document.getElementById('cannon-sound');
+const applauseSound       = document.getElementById('applause-sound');
+const chatToggleContainer = document.getElementById('toggle-chat-container');
+const chatToggleListening = document.getElementById('toggle-chat-listening');
+const chatToggleSpeaking  = document.getElementById('toggle-chat-speaking');
 
 
-chatToggle.addEventListener('click', () => {
+chatToggleContainer.addEventListener('click', () => {
     chatContainer.classList.toggle('hidden')
+    updateScroll();
 });
 
 submitGuessButton.addEventListener('click', submitGuess);
@@ -33,6 +36,7 @@ let firstRun = true;
 
 if ('webkitSpeechRecognition' in window) {
     var speechRecognition = new webkitSpeechRecognition();
+
     speechRecognition.lang = 'bg-BG';
     speechRecognition.interimResults = true;
     speechRecognition.maxAlternatives = 1;
@@ -49,8 +53,20 @@ if ('webkitSpeechRecognition' in window) {
 
     speechRecognition.onerror = (event) => {
         console.log('Грешка в разпознаването на глас.', event.error);
-        speechRecognition.start();
+        try { speechRecognition.start() } catch (error) { console.error(error) };
     };
+
+    audioPrompt.addEventListener('play', function() {
+        chatToggleListening.style.display = 'none';
+        chatToggleSpeaking.style.display = 'block';
+        speechRecognition.abort();
+    });
+    
+    audioPrompt.addEventListener('ended', function() {
+        chatToggleSpeaking.style.display = 'none';
+        chatToggleListening.style.display = 'block';
+        try { speechRecognition.start() } catch (error) { console.error(error) };
+    });
 } else {
     console.log('За съжаление, този браузър не поддържа разпознване на глас. Моля опитайте с Google Chrome или Microsoft Edge.');
 }
@@ -113,6 +129,8 @@ function sendPrompt(path, prompt) {
         if ('audio' in data) {
             audioPrompt.src = "data:audio/mp3;base64," + data.audio;
             audioPrompt.play();
+        } else {
+            try { speechRecognition.start() } catch (error) { console.log(error) }
         }
         
         chatOutput.innerHTML += `<div>🔮: ${data.text}</div>`;
@@ -120,7 +138,6 @@ function sendPrompt(path, prompt) {
 
         gameLoader.style.display = 'none';    
         gameContainer.style.display = 'block';
-        speechRecognition.start();
     })
 }
 

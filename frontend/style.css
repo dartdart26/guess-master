@@ -209,16 +209,30 @@ body {
 /* END: Cannon */
 
 /* BEGIN: Toggle chat */
-#toggle-chat {
+#toggle-chat-container {
     position: relative;
-    color: #ffd700;
     padding: 10px;
-    text-decoration: none;
     font-size: 22px;
     font-weight: bold;
+    margin: 0 auto;
+    width: 150px;
 }
 
-#toggle-chat::before, #toggle-chat::after {
+#toggle-chat-listening, #toggle-chat-speaking {
+    text-decoration: none;
+    display: none;
+}
+
+#toggle-chat-listening {
+    color: #B4CA61;
+}
+
+#toggle-chat-speaking {
+    color: #be4a4a;
+}
+
+
+#toggle-chat-container::before, #toggle-chat-container::after {
     content: '';
     position: absolute;
     top: 50%;
@@ -230,14 +244,14 @@ body {
     background-repeat: no-repeat;
 }
 
-#toggle-chat::before {
+#toggle-chat-container::before {
     left: -25px;
     animation: spinAndFloat1 6s linear infinite;
     animation-direction: alternate;
 
 }
 
-#toggle-chat::after {
+#toggle-chat-container::after {
     right: -25px;
     animation: spinAndFloat2 6s linear infinite;
     animation-direction: alternate;

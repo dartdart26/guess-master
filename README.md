@@ -95,3 +95,6 @@ Example request/responses look like:
     "audio": "aabbbbb....",
 }
 ```
+
+## Frontend
+The frontend runs on voice recognition by default. This works only in Chrome/Edge/Safari. However the chat history as well as a text field to write and a submit button can be used by clicking of the "Слушам те!" label in the main screen of the game.

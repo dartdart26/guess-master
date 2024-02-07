@@ -81,6 +81,7 @@ class Assistant:
         guessed = lines[0]
         json_response = {}
         json_response["thread_id"] = thread_id
+
         if guessed.startswith("1"):
             new_object = self.select_random_object()
             self.send_prompt(thread_id, "new_object: " + new_object["object"])
@@ -88,7 +89,7 @@ class Assistant:
             json_response["text"] = guessed_text
             json_response["audio"] = base64_guessed_audio()
         else:
-            hint = lines[1]
+            hint = guessed.lstrip('0 ')
             hint = "Опитай пак! " + hint
             json_response["text"] = hint
             audio = generate_audio(hint)
